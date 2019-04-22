@@ -916,7 +916,7 @@ class CurrentUserSerializer(serializers.ModelSerializer):
     projects_url = serializers.SerializerMethodField()
     gravatar = serializers.SerializerMethodField()
     languages = serializers.SerializerMethodField()
-    extra_details = WritableJSONField(source='extra_details.data')
+    # extra_details = WritableJSONField(source='extra_details.data')
     current_password = serializers.CharField(write_only=True, required=False)
     new_password = serializers.CharField(write_only=True, required=False)
     git_rev = serializers.SerializerMethodField()
@@ -936,7 +936,7 @@ class CurrentUserSerializer(serializers.ModelSerializer):
             'is_staff',
             'last_login',
             'languages',
-            'extra_details',
+            # 'extra_details',
             'current_password',
             'new_password',
             'git_rev',
@@ -952,7 +952,7 @@ class CurrentUserSerializer(serializers.ModelSerializer):
             '%Y-%m-%dT%H:%M:%SZ')
 
     def get_projects_url(self, obj):
-        return '/'.join((settings.KOBOCAT_URL, obj.username))
+        return '/'.join((settings.KOBOCAT_URL, "forms/assigned/"))
 
     def get_gravatar(self, obj):
         return gravatar_url(obj.email)
@@ -968,6 +968,12 @@ class CurrentUserSerializer(serializers.ModelSerializer):
             return False
 
     def to_representation(self, obj):
+        if obj.is_anonymous():
+            return {'message': 'user is not logged in'}
+        return super(CurrentUserSerializer, self).to_representation(obj)
+
+
+    def to_representation_custom(self, obj):
         if obj.is_anonymous():
             return {'message': 'user is not logged in'}
         rep = super(CurrentUserSerializer, self).to_representation(obj)
