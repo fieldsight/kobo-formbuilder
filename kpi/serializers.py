@@ -73,8 +73,11 @@ class WritableJSONField(serializers.Field):
             try:
                 return json.loads(data)
             except Exception as e:
-                raise serializers.ValidationError(
-                    u'Unable to parse JSON: {}'.format(e))
+                try:
+                    return data
+                except Exception as e1:
+                    raise serializers.ValidationError(
+                        u'Unable to parse JSON: {}'.format(e))
 
     def to_representation(self, value):
         return value

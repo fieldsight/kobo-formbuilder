@@ -1291,6 +1291,11 @@ class AssetViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return super(AssetViewSet, self).finalize_response(
             request, response, *args, **kwargs)
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = Asset.objects.get(uid=kwargs['uid'])
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
 
 def _wrap_html_pre(content):
     return "<!doctype html><html><body><code><pre>%s</pre></code></body></html>" % content
