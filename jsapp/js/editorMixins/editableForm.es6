@@ -417,6 +417,99 @@ export default assign({
       asset_updated: update_states.PENDING_UPDATE,
     });
   },
+  saveAndExitForm(evt) {
+    if (evt && evt.preventDefault) {
+      evt.preventDefault();
+    }
+
+    if (this.state.settings__style !== undefined) {
+      this.app.survey.settings.set('style', this.state.settings__style);
+    }
+
+    let surveyJSON = surveyToValidJson(this.app.survey)
+    if (this.state.asset) {
+      surveyJSON = unnullifyTranslations(surveyJSON, this.state.asset.content);
+    }
+    let params = {content: surveyJSON};
+
+    if (this.state.name) {
+      params.name = this.state.name;
+    }
+
+    // handle settings update (if any changed)
+    if (this.state.settingsNew) {
+      let settings = {};
+      if (this.state.asset) {
+        settings = this.state.asset.settings;
+      }
+
+      if (this.state.settingsNew.description) {
+        settings.description = this.state.settingsNew.description;
+      }
+      if (this.state.settingsNew.sector) {
+        settings.sector = this.state.settingsNew.sector;
+      }
+      if (this.state.settingsNew.country) {
+        settings.country = this.state.settingsNew.country;
+      }
+      if (this.state.settingsNew['share-metadata']) {
+        settings['share-metadata'] = this.state.settingsNew['share-metadata'];
+      }
+      params.settings = JSON.stringify(settings);
+    }
+
+    params = koboMatrixParser(params);
+
+    if (this.state.editorState === 'new') {
+      // create new asset
+      if (this.state.desiredAssetType) {
+        params.asset_type = this.state.desiredAssetType;
+      } else {
+        params.asset_type = 'block';
+      }
+      actions.resources.createResource.triggerAsync(params)
+        .then((asset) => {
+          hashHistory.push('/library');
+        })
+    } else {
+      // update existing asset
+      var assetId = this.props.params.assetid;
+
+      actions.resources.updateAsset.triggerAsync(assetId, params)
+        .then(() => {
+          this.unpreventClosingTab();
+          this.setState({
+            asset_updated: update_states.UP_TO_DATE,
+            surveySaveFail: false,
+          });
+           window.setTimeout(function(){
+              window.location = stores.session.currentAccount.projects_url;
+         }, 1000);
+        })
+        .catch((resp) => {
+          var errorMsg = `${t('Your changes could not be saved, likely because of a lost internet connection.')}&nbsp;${t('Keep this window open and try saving again while using a better connection.')}`;
+          if (resp.statusText != 'error')
+            errorMsg = resp.statusText;
+
+          alertify.defaults.theme.ok = 'ajs-cancel';
+          let dialog = alertify.dialog('alert');
+          let opts = {
+            title: t('Error saving form'),
+            message: errorMsg,
+            label: t('Dismiss'),
+          };
+          dialog.set(opts).show();
+
+          this.setState({
+            surveySaveFail: true,
+            asset_updated: update_states.SAVE_FAILED
+          });
+        });
+    }
+    this.setState({
+      asset_updated: update_states.PENDING_UPDATE,
+    });
+  },
 
   handleScroll(evt) {
     var scrollTop = evt.target.scrollTop;
@@ -464,6 +557,7 @@ export default assign({
     } else {
       ooo.saveButtonText = t('save');
     }
+    ooo.saveExitButtonText = t('save & Exit');
     return ooo;
   },
 
@@ -608,6 +702,7 @@ export default assign({
       showAllAvailable,
       name,
       saveButtonText,
+      saveExitButtonText,
     } = this.buttonStates();
 
     let nameFieldLabel;
@@ -679,6 +774,17 @@ export default assign({
               <i />
               {saveButtonText}
             </bem.FormBuilderHeader__button>
+
+            <bem.FormBuilderHeader__button m={['save', {
+                    savepending: this.state.asset_updated === update_states.PENDING_UPDATE,
+                    savecomplete: this.state.asset_updated === update_states.UP_TO_DATE,
+                    savefailed: this.state.asset_updated === update_states.SAVE_FAILED,
+                    saveneeded: this.state.asset_updated === update_states.UNSAVED_CHANGES,
+                  }]} onClick={this.saveAndExitForm} className="disabled"
+                  disabled={!this.state.surveyAppRendered || !!this.state.surveyLoadError}>
+                <i />
+                {saveExitButtonText}
+              </bem.FormBuilderHeader__button>
 
             <bem.FormBuilderHeader__close
               m={[{'close-warning': this.needsSave()}]}
