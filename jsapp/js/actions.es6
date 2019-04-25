@@ -173,6 +173,9 @@ actions.resources = Reflux.createActions({
   updateAsset: {
     asyncResult: true
   },
+  updateAssetAndDeploy: {
+    asyncResult: true
+  },
   updateSubmissionValidationStatus: {
     children: [
       'completed',
@@ -354,6 +357,38 @@ actions.resources.updateAsset.listen(function(uid, values, params={}) {
         params.onComplete(asset, uid, values);
       }
       notify(t('successfully updated'));
+    })
+    .fail(function(resp){
+      actions.resources.updateAsset.failed(resp);
+      if (params.onFailed) {
+        params.onFailed(resp);
+      }
+    });
+});
+
+actions.resources.updateAssetAndDeploy.listen(function(uid, values, params={}) {
+  dataInterface.patchAsset(uid, values)
+    .done((asset) => {
+      actions.resources.updateAssetAndDeploy.completed(asset, uid, values);
+      if (typeof params.onComplete === 'function') {
+        params.onComplete(asset, uid, values);
+      }
+      actions.resources.deployAsset(asset, true, {
+          onDone: () => {
+            notify(t('redeployed form'));
+            actions.resources.loadAsset({id: asset.uid});
+            if (dialog && typeof dialog.destroy === 'function') {
+              dialog.destroy();
+            }
+          },
+          onFail: () => {
+            if (dialog && typeof dialog.destroy === 'function') {
+              dialog.destroy();
+            }
+          }
+        });
+      notify(t('successfully deployed'));
+
     })
     .fail(function(resp){
       actions.resources.updateAsset.failed(resp);

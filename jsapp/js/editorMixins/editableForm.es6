@@ -475,7 +475,7 @@ export default assign({
       // update existing asset
       var assetId = this.props.params.assetid;
 
-      actions.resources.updateAsset.triggerAsync(assetId, params)
+      actions.resources.updateAssetAndDeploy.triggerAsync(assetId, params)
         .then(() => {
           this.unpreventClosingTab();
           this.setState({
@@ -483,7 +483,7 @@ export default assign({
             surveySaveFail: false,
           });
            window.setTimeout(function(){
-              window.location = stores.session.currentAccount.projects_url;
+            window.location = stores.session.currentAccount.projects_url;
          }, 1000);
         })
         .catch((resp) => {
