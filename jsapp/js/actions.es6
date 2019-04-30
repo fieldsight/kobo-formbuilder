@@ -373,9 +373,9 @@ actions.resources.updateAssetAndDeploy.listen(function(uid, values, params={}) {
       if (typeof params.onComplete === 'function') {
         params.onComplete(asset, uid, values);
       }
-      actions.resources.deployAsset(asset, true, {
+      actions.resources.deployAsset(asset, asset.has_deployment, {
           onDone: () => {
-            notify(t('redeployed form'));
+            notify(t('deployed form'));
             actions.resources.loadAsset({id: asset.uid});
             if (dialog && typeof dialog.destroy === 'function') {
               dialog.destroy();
