@@ -557,7 +557,7 @@ export default assign({
     } else {
       ooo.saveButtonText = t('save');
     }
-    ooo.saveExitButtonText = t('save & Exit');
+    ooo.saveExitButtonText = t('deploy & Exit');
     return ooo;
   },
 
