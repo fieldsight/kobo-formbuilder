@@ -484,7 +484,7 @@ export default assign({
           });
            window.setTimeout(function(){
             window.location = stores.session.currentAccount.projects_url;
-         }, 1500);
+         }, 3500);
         })
         .catch((resp) => {
           var errorMsg = `${t('Your changes could not be saved, likely because of a lost internet connection.')}&nbsp;${t('Keep this window open and try saving again while using a better connection.')}`;
