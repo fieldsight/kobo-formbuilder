@@ -378,16 +378,17 @@ actions.resources.updateAssetAndDeploy.listen(function(uid, values, params={}) {
             notify(t('deployed form'));
             },
           onFail: () => {
-            if (dialog && typeof dialog.destroy === 'function') {
-              dialog.destroy();
+            notify(t('Failed to deploy this form'));
+                window.setTimeout(function(){
+            window.location.reload();
+         }, 1500);
             }
-          }
         });
-      notify(t('successfully deployed'));
+
 
     })
     .fail(function(resp){
-      actions.resources.updateAsset.failed(resp);
+      actions.resources.updateAssetAndDeploy.failed(resp);
       if (params.onFailed) {
         params.onFailed(resp);
       }
