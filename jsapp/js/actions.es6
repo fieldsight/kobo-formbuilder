@@ -381,7 +381,7 @@ actions.resources.updateAssetAndDeploy.listen(function(uid, values, params={}) {
             notify(t('Failed to deploy this form'));
                 window.setTimeout(function(){
             window.location.reload();
-         }, 1500);
+         }, 5500);
             }
         });
 
