@@ -56,7 +56,7 @@ UPCOMING_DOWNTIME = False
 if os.environ.get('CSRF_COOKIE_DOMAIN'):
     CSRF_COOKIE_DOMAIN = os.environ['CSRF_COOKIE_DOMAIN']
     SESSION_COOKIE_DOMAIN = CSRF_COOKIE_DOMAIN
-    SESSION_COOKIE_NAME = 'kobonaut'
+    SESSION_COOKIE_NAME = 'my_cookie'
 
 # Instances of this model will be treated as allowed origins; see
 # https://github.com/ottoyiu/django-cors-headers#cors_model
@@ -693,9 +693,12 @@ MONGO_CONNECTION = MongoClient(
     MONGO_CONNECTION_URL, j=True, tz_aware=True, connect=False)
 MONGO_DB = MONGO_CONNECTION[MONGO_DATABASE['NAME']]
 
-
+print("importing local settings")
 try:
     from kobo.local_settings import *  # nopep8
+    print("imported")
 except ImportError as e:
-    print (str(e))
+    print(str(e))
+else:
+    print("import failed else")
 
