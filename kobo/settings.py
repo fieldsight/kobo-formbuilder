@@ -200,14 +200,14 @@ SKIP_HEAVY_MIGRATIONS = os.environ.get('SKIP_HEAVY_MIGRATIONS', 'False') == 'Tru
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-DATABASES = {
-    'default': dj_database_url.config(default="sqlite:///%s/db.sqlite3" % BASE_DIR),
-}
-# This project does not use GIS (yet). Change the database engine accordingly
-# to avoid unnecessary dependencies.
-for db in DATABASES.values():
-    if db['ENGINE'] == 'django.contrib.gis.db.backends.postgis':
-        db['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+# DATABASES = {
+#     'default': dj_database_url.config(default="sqlite:///%s/db.sqlite3" % BASE_DIR),
+# }
+# # This project does not use GIS (yet). Change the database engine accordingly
+# # to avoid unnecessary dependencies.
+# for db in DATABASES.values():
+#     if db['ENGINE'] == 'django.contrib.gis.db.backends.postgis':
+#         db['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 
 
 # Internationalization
@@ -696,7 +696,6 @@ MONGO_DB = MONGO_CONNECTION[MONGO_DATABASE['NAME']]
 print("importing local settings")
 try:
     from kobo.local_settings import *  # nopep8
-    print("imported")
 except ImportError as e:
     print(str(e))
 else:
