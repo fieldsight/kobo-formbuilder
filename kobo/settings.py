@@ -693,11 +693,9 @@ MONGO_CONNECTION = MongoClient(
     MONGO_CONNECTION_URL, j=True, tz_aware=True, connect=False)
 MONGO_DB = MONGO_CONNECTION[MONGO_DATABASE['NAME']]
 
-print("importing local settings")
 try:
     from kobo.local_settings import *  # nopep8
 except ImportError as e:
     print(str(e))
-else:
-    print("import failed else")
+
 
