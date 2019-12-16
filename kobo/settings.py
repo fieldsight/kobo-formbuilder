@@ -56,7 +56,7 @@ UPCOMING_DOWNTIME = False
 if os.environ.get('CSRF_COOKIE_DOMAIN'):
     CSRF_COOKIE_DOMAIN = os.environ['CSRF_COOKIE_DOMAIN']
     SESSION_COOKIE_DOMAIN = CSRF_COOKIE_DOMAIN
-    SESSION_COOKIE_NAME = 'kobonaut'
+    SESSION_COOKIE_NAME = 'my_cookie'
 
 # Instances of this model will be treated as allowed origins; see
 # https://github.com/ottoyiu/django-cors-headers#cors_model
@@ -200,14 +200,14 @@ SKIP_HEAVY_MIGRATIONS = os.environ.get('SKIP_HEAVY_MIGRATIONS', 'False') == 'Tru
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-DATABASES = {
-    'default': dj_database_url.config(default="sqlite:///%s/db.sqlite3" % BASE_DIR),
-}
-# This project does not use GIS (yet). Change the database engine accordingly
-# to avoid unnecessary dependencies.
-for db in DATABASES.values():
-    if db['ENGINE'] == 'django.contrib.gis.db.backends.postgis':
-        db['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+# DATABASES = {
+#     'default': dj_database_url.config(default="sqlite:///%s/db.sqlite3" % BASE_DIR),
+# }
+# # This project does not use GIS (yet). Change the database engine accordingly
+# # to avoid unnecessary dependencies.
+# for db in DATABASES.values():
+#     if db['ENGINE'] == 'django.contrib.gis.db.backends.postgis':
+#         db['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 
 
 # Internationalization
@@ -693,9 +693,9 @@ MONGO_CONNECTION = MongoClient(
     MONGO_CONNECTION_URL, j=True, tz_aware=True, connect=False)
 MONGO_DB = MONGO_CONNECTION[MONGO_DATABASE['NAME']]
 
-
 try:
     from kobo.local_settings import *  # nopep8
 except ImportError as e:
-    print (str(e))
+    print(str(e))
+
 
