@@ -6,4 +6,3 @@ libpcre3-dev
 libpq-dev
 nodejs
 ttfautohint
-screen
