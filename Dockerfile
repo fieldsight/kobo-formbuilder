@@ -142,7 +142,7 @@ RUN apt-get update --fix-missing && \
   npm install -g && \
   npm run build
 
-COPY kobo/local_settings_sample.py /srv/src/kpi/kobo/local_settings.py
-COPY run_kpi.sh /srv/src/kpi/scripts/run_kpi.sh
+COPY ./kobo/local_settings_sample.py /srv/src/kpi/kobo/local_settings.py
+COPY ./run_kpi.sh /srv/src/kpi/scripts/run_kpi.sh
 
 RUN python manage.py collectstatic --noinput
