@@ -145,4 +145,4 @@ RUN apt-get update --fix-missing && \
 COPY ./kobo/local_settings_sample.py /srv/src/kpi/kobo/local_settings.py
 COPY ./run_kpi.sh /srv/src/kpi/scripts/run_kpi.sh
 
-RUN python manage.py collectstatic --noinput
+
