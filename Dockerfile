@@ -92,7 +92,7 @@ RUN ln -s "${KPI_NODE_PATH}" "${KPI_SRC_DIR}/node_modules" && \
 # Organize static assets. #
 ###########################
 
-RUN python manage.py collectstatic --noinput
+
 
 
 #####################################
@@ -141,3 +141,8 @@ RUN apt-get update --fix-missing && \
   cd /srv/src/kpi && \
   npm install -g && \
   npm run build
+
+COPY kobo/local_settings_sample.py /srv/src/kpi/kobo/local_settings.py
+COPY run_kpi.sh /srv/src/kpi/scripts/run_kpi.sh
+
+RUN python manage.py collectstatic --noinput
