@@ -38,12 +38,16 @@ DEFAULT_DEPLOYMENT_BACKEND = 'kobocat'
 BROKER_URL = os.environ.get('KPI_BROKER_URL', 'redis://redis_main:6379/0')
 
 DEBUG = True
+KOBOCAT_URL_HTTP = ""
+if "https" in KOBOCAT_URL:
+    KOBOCAT_URL_HTTP = KOBOCAT_URL.replace("https", "http")
 
 
 CORS_ORIGIN_WHITELIST = [
     ENKETO_SERVER,
     KOBOCAT_INTERNAL_URL,
-    KOBOCAT_URL
+    KOBOCAT_URL,
+    KOBOCAT_URL_HTTP
 ]
 
 WEBPACK_LOADER = {
