@@ -39,9 +39,12 @@ BROKER_URL = os.environ.get('KPI_BROKER_URL', 'redis://redis_main:6379/0')
 
 DEBUG = True
 
-CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_URLS_REGEX = r'^/assets/.*$'
+CORS_ORIGIN_WHITELIST = [
+    ENKETO_SERVER,
+    KOBOCAT_INTERNAL_URL,
+    KOBOCAT_URL
+]
 
 WEBPACK_LOADER = {
     'DEFAULT': {
