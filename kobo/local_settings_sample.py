@@ -38,6 +38,7 @@ DEFAULT_DEPLOYMENT_BACKEND = 'kobocat'
 BROKER_URL = os.environ.get('KPI_BROKER_URL', 'redis://redis_main:6379/0')
 
 DEBUG = True
+
 KOBOCAT_URL_HTTP = ""
 if "https" in KOBOCAT_URL:
     KOBOCAT_URL_HTTP = KOBOCAT_URL.replace("https", "http")
@@ -49,6 +50,18 @@ CORS_ORIGIN_WHITELIST = [
     KOBOCAT_URL,
     KOBOCAT_URL_HTTP
 ]
+
+
+
+#CORS_ORIGIN_ALLOW_ALL = True # insecure cross site attacks
+
+if KOBOCAT_URL_HTTP.endswith("/"):
+    CORS_ORIGIN_WHITELIST.append(KOBOCAT_URL_HTTP[:-1])
+
+if KOBOCAT_URL.endswith("/"):
+    CORS_ORIGIN_WHITELIST.append(KOBOCAT_URL[:-1])
+
+
 
 WEBPACK_LOADER = {
     'DEFAULT': {
