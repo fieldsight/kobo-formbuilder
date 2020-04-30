@@ -53,7 +53,7 @@ CORS_ORIGIN_WHITELIST = [
 
 
 
-#CORS_ORIGIN_ALLOW_ALL = True # insecure cross site attacks
+CORS_ORIGIN_ALLOW_ALL = True # insecure cross site attacks
 
 if KOBOCAT_URL_HTTP.endswith("/"):
     CORS_ORIGIN_WHITELIST.append(KOBOCAT_URL_HTTP[:-1])
